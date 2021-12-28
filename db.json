@@ -1,16 +1,4 @@
 {
-  "posts": [
-    { "id": 1, "title": "Post 1" },
-    { "id": 2, "title": "Post 2" },
-    { "id": 3, "title": "Post 3" }
-  ],
-  "comments": [
-    { "id": 1, "body": "some comment", "postId": 1 },
-    { "id": 2, "body": "some comment", "postId": 1 }
-  ],
-  "profile": {
-    "name": "typicode"
-  },
   "ipv4": [
     {
       "id": 1,
@@ -111,5 +99,99 @@
       "name": "ubuntu1",
       "extra": "01:50:2f:9b:6d:1b:d1\r"
     }
-  ]
+  ],
+  "rules": [
+      {
+        "name": "'Allow-DHCP-Renew'",
+        "src": "'wan'",
+        "proto": "'udp'",
+        "dest_port": "'68'",
+        "target": "'ACCEPT'",
+        "family": "'ipv4'"
+      },
+      {
+        "name": "'Allow-Ping'",
+        "src": "'wan'",
+        "proto": "'icmp'",
+        "icmp_type": "'echo-request'",
+        "family": "'ipv4'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Allow-IGMP'",
+        "src": "'wan'",
+        "proto": "'igmp'",
+        "family": "'ipv4'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Allow-DHCPv6'",
+        "src": "'wan'",
+        "proto": "'udp'",
+        "src_ip": "'fc00::/6'",
+        "dest_ip": "'fc00::/6'",
+        "dest_port": "'546'",
+        "family": "'ipv6'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Allow-MLD'",
+        "src": "'wan'",
+        "proto": "'icmp'",
+        "src_ip": "'fe80::/10'",
+        "icmp_type": "'130/0' '131/0' '132/0' '143/0'",
+        "family": "'ipv6'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Allow-ICMPv6-Input'",
+        "src": "'wan'",
+        "proto": "'icmp'",
+        "icmp_type": "'echo-request' 'echo-reply' 'destination-unreachable' 'packet-too-big' 'time-exceeded' 'bad-header' 'unknown-header-type' 'router-solicitation' 'neighbour-solicitation' 'router-advertisement' 'neighbour-advertisement'",
+        "limit": "'1000/sec'",
+        "family": "'ipv6'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Allow-ICMPv6-Forward'",
+        "src": "'wan'",
+        "dest": "'*'",
+        "proto": "'icmp'",
+        "icmp_type": "'echo-request' 'echo-reply' 'destination-unreachable' 'packet-too-big' 'time-exceeded' 'bad-header' 'unknown-header-type'",
+        "limit": "'1000/sec'",
+        "family": "'ipv6'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Allow-IPSec-ESP'",
+        "src": "'wan'",
+        "dest": "'lan'",
+        "proto": "'esp'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Allow-ISAKMP'",
+        "src": "'wan'",
+        "dest": "'lan'",
+        "dest_port": "'500'",
+        "proto": "'udp'",
+        "target": "'ACCEPT'"
+      },
+      {
+        "name": "'Support-UDP-Traceroute'",
+        "src": "'wan'",
+        "dest_port": "'33434:33689'",
+        "proto": "'udp'",
+        "family": "'ipv4'",
+        "target": "'REJECT'",
+        "enabled": "'0'"
+      },
+      {
+        "name": "'Yasir Access'",
+        "src": "'wan'",
+        "dest_port": "'22'",
+        "target": "'ACCEPT'",
+        "src_ip": "'89.147.205.130'"
+      }
+    ]
 }
