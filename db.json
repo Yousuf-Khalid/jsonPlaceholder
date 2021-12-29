@@ -1,4 +1,425 @@
 {
+  "dhcp": {
+    "dnsmasq": [
+      {
+        "domainneeded": "'1'",
+        "boguspriv": "'1'",
+        "filterwin2k": "'0'",
+        "localise_queries": "'1'",
+        "rebind_protection": "'1'",
+        "rebind_localhost": "'1'",
+        "local": "'/lan/'",
+        "domain": "'lan'",
+        "expandhosts": "'1'",
+        "nonegcache": "'0'",
+        "authoritative": "'1'",
+        "readethers": "'1'",
+        "leasefile": "'/tmp/dhcp.leases'",
+        "resolvfile": "'/tmp/resolv.conf.d/resolv.conf.auto'",
+        "nonwildcard": "'1'",
+        "localservice": "'1'",
+        "ednspacket_max": "'1232'"
+      }
+    ],
+    "include": [
+      {
+        "path": "'/etc/firewall.user'"
+      },
+      {
+        "path": "'/etc/firewall.fail2ban'",
+        "enabled": "'1'",
+        "reload": "'1'"
+      }
+    ],
+    "docker": {
+      "input": "'ACCEPT'",
+      "output": "'ACCEPT'",
+      "forward": "'ACCEPT'",
+      "name": "'docker'",
+      "network": "'docker'"
+    }
+  },
+  "luci": {
+    "main": {
+      "lang": "'auto'",
+      "mediaurlbase": "'/luci-static/bootstrap'",
+      "resourcebase": "'/luci-static/resources'",
+      "ubuspath": "'/ubus/'"
+    },
+    "flash_keep": {
+      "uci": "'/etc/config/'",
+      "dropbear": "'/etc/dropbear/'",
+      "openvpn": "'/etc/openvpn/'",
+      "passwd": "'/etc/passwd'",
+      "opkg": "'/etc/opkg.conf'",
+      "firewall": "'/etc/firewall.user'",
+      "uploads": "'/lib/uci/upload/'"
+    },
+    "languages": "internal",
+    "sauth": {
+      "sessionpath": "'/tmp/luci-sessions'",
+      "sessiontime": "'3600'"
+    },
+    "ccache": {
+      "enable": "'1'"
+    },
+    "themes": {
+      "Bootstrap": "'/luci-static/bootstrap'",
+      "BootstrapDark": "'/luci-static/bootstrap-dark'",
+      "BootstrapLight": "'/luci-static/bootstrap-light'"
+    },
+    "apply": {
+      "rollback": "'90'",
+      "holdoff": "'4'",
+      "timeout": "'5'",
+      "display": "'1.5'"
+    },
+    "diag": {
+      "dns": "'openwrt.org'",
+      "ping": "'openwrt.org'",
+      "route": "'openwrt.org'"
+    }
+  },
+  "mosquitto": {
+    "owrt": {
+      "use_uci": "'0'"
+    },
+    "mosquitto": "mosquitto"
+  },
+  "network": {
+    "loopback": {
+      "device": "'lo'",
+      "proto": "'static'",
+      "ipaddr": "'127.0.0.1'",
+      "netmask": "'255.0.0.0'"
+    },
+    "globals": {
+      "ula_prefix": "'fda3:28e1:cfae::/48'"
+    },
+    "device": [
+      {
+        "name": "'br-lan'",
+        "type": "'bridge'",
+        "ports": "'lan0' 'lan1' 'lan2' 'lan3' 'lan4'"
+      },
+      {
+        "type": "'bridge'",
+        "name": "'docker0'"
+      }
+    ],
+    "lan": {
+      "device": "'br-lan'",
+      "proto": "'static'",
+      "ipaddr": "'192.168.1.1'",
+      "netmask": "'255.255.255.0'",
+      "ip6assign": "'60'"
+    },
+    "wan": {
+      "device": "'eth2'",
+      "proto": "'dhcp'"
+    },
+    "wan6": {
+      "device": "'eth2'",
+      "proto": "'dhcpv6'"
+    },
+    "docker": {
+      "device": "'docker0'",
+      "proto": "'none'",
+      "auto": "'0'"
+    }
+  },
+  "rpcd": {
+    "rpcd": [
+      {
+        "socket": "'/var/run/ubus/ubus.sock'",
+        "timeout": "'30'"
+      }
+    ],
+    "login": [
+      {
+        "username": "'root'",
+        "password": "'$p$root'",
+        "read": "'*'",
+        "write": "'*'"
+      }
+    ]
+  },
+  "system": {
+    "system": [
+      {
+        "hostname": "'OpenWrt'",
+        "timezone": "'UTC'",
+        "ttylogin": "'0'",
+        "log_size": "'64'",
+        "urandom_seed": "'0'"
+      }
+    ],
+    "ntp": {
+      "enabled": "'1'",
+      "enable_server": "'0'",
+      "server": "'0.openwrt.pool.ntp.org' '1.openwrt.pool.ntp.org' '2.openwrt.pool.ntp.org' '3.openwrt.pool.ntp.org'"
+    }
+  },
+  "ubootenv": {
+    "ubootenv": [
+      {
+        "dev": "'/dev/mtd0'",
+        "offset": "'0xf0000'",
+        "envsize": "'0x10000'",
+        "secsize": "'0x10000'"
+      }
+    ]
+  },
+  "ucitrack": {
+    "network": [
+      {
+        "init": "'network'",
+        "affects": "'dhcp'"
+      }
+    ],
+    "wireless": [
+      {
+        "affects": "'network'"
+      }
+    ],
+    "firewall": [
+      {
+        "init": "'firewall'",
+        "affects": "'luci-splash' 'qos' 'miniupnpd'"
+      }
+    ],
+    "olsr": [
+      {
+        "init": "'olsrd'"
+      }
+    ],
+    "dhcp": [
+      {
+        "init": "'dnsmasq'",
+        "affects": "'odhcpd'"
+      }
+    ],
+    "odhcpd": [
+      {
+        "init": "'odhcpd'"
+      }
+    ],
+    "dropbear": [
+      {
+        "init": "'dropbear'"
+      }
+    ],
+    "httpd": [
+      {
+        "init": "'httpd'"
+      }
+    ],
+    "fstab": [
+      {
+        "exec": "'/sbin/block mount'"
+      }
+    ],
+    "qos": [
+      {
+        "init": "'qos'"
+      }
+    ],
+    "system": [
+      {
+        "init": "'led'",
+        "exec": "'/etc/init.d/log reload'",
+        "affects": "'luci_statistics' 'dhcp'"
+      }
+    ],
+    "luci_splash": [
+      {
+        "init": "'luci_splash'"
+      }
+    ],
+    "upnpd": [
+      {
+        "init": "'miniupnpd'"
+      }
+    ],
+    "ntpclient": [
+      {
+        "init": "'ntpclient'"
+      }
+    ],
+    "samba": [
+      {
+        "init": "'samba'"
+      }
+    ],
+    "tinyproxy": [
+      {
+        "init": "'tinyproxy'"
+      }
+    ]
+  },
+  "uhttpd": {
+    "main": {
+      "listen_http": "'0.0.0.0:80' '[::]:80'",
+      "listen_https": "'0.0.0.0:443' '[::]:443'",
+      "redirect_https": "'0'",
+      "home": "'/www'",
+      "rfc1918_filter": "'1'",
+      "max_requests": "'3'",
+      "max_connections": "'100'",
+      "cert": "'/etc/uhttpd.crt'",
+      "key": "'/etc/uhttpd.key'",
+      "cgi_prefix": "'/cgi-bin'",
+      "lua_prefix": "'/cgi-bin/luci",
+      "script_timeout": "'60'",
+      "network_timeout": "'30'",
+      "http_keepalive": "'20'",
+      "tcp_keepalive": "'1'",
+      "ubus_prefix": "'/ubus'"
+    },
+    "defaults": {
+      "days": "'730'",
+      "key_type": "'ec'",
+      "bits": "'2048'",
+      "ec_curve": "'P-256'",
+      "country": "'ZZ'",
+      "state": "'Somewhere'",
+      "location": "'Unknown'",
+      "commonname": "'OpenWrt'"
+    }
+  },
+  "wireless": {
+    "radio0": {
+      "type": "'mac80211'",
+      "path": "'soc/soc:pcie/pci0000:00/0000:00:02.0/0000:02:00.0'",
+      "channel": "'36'",
+      "band": "'5g'",
+      "htmode": "'VHT80'",
+      "cell_density": "'0'"
+    },
+    "default_radio0": {
+      "device": "'radio0'",
+      "network": "'lan'",
+      "mode": "'ap'",
+      "ssid": "'OpenWrt'",
+      "encryption": "'psk2'",
+      "key": "'chaudhry'"
+    },
+    "radio1": {
+      "type": "'mac80211'",
+      "path": "'soc/soc:pcie/pci0000:00/0000:00:01.0/0000:01:00.0'",
+      "channel": "'1'",
+      "band": "'2g'",
+      "htmode": "'HT20'",
+      "cell_density": "'0'"
+    },
+    "default_radio1": {
+      "device": "'radio1'",
+      "network": "'lan'",
+      "mode": "'ap'",
+      "ssid": "'OpenWrt'",
+      "encryption": "'psk2'",
+      "key": "'chaudhry'"
+    },
+    "lan": {
+      "interface": "'lan'",
+      "start": "'100'",
+      "limit": "'150'",
+      "leasetime": "'12h'",
+      "dhcpv4": "'server'",
+      "dhcpv6": "'server'",
+      "ra": "'server'",
+      "ra_slaac": "'1'",
+      "ra_flags": "'managed-config' 'other-config'"
+    },
+    "wan": {
+      "interface": "'wan'",
+      "ignore": "'1'"
+    },
+    "odhcpd": {
+      "maindhcp": "'0'",
+      "leasefile": "'/tmp/hosts/odhcpd'",
+      "leasetrigger": "'/usr/sbin/odhcpd-update'",
+      "loglevel": "'4'"
+    }
+  },
+  "dockerd": {
+    "globals": {
+      "data_root": "'/opt/docker/'",
+      "log_level": "'warn'",
+      "iptables": "'1'"
+    },
+    "firewall": {
+      "device": "'docker0'",
+      "blocked_interfaces": "'wan'"
+    }
+  },
+  "dropbear": {
+    "dropbear": [
+      {
+        "PasswordAuth": "'on'",
+        "RootPasswordAuth": "'on'",
+        "Port": "'22'"
+      }
+    ]
+  },
+  "fail2ban": {
+    "fail2ban": {
+      "dbfile": "'/var/lib/fail2ban/fail2ban.sqlite3'"
+    }
+  },
+  "firewall": {
+    "defaults": [
+      {
+        "syn_flood": "'1'",
+        "input": "'ACCEPT'",
+        "output": "'ACCEPT'",
+        "forward": "'REJECT'"
+      }
+    ],
+    "zone": [
+      {
+        "name": "'lan'",
+        "network": "'lan'",
+        "input": "'ACCEPT'",
+        "output": "'ACCEPT'",
+        "forward": "'ACCEPT'"
+      },
+      {
+        "name": "'wan'",
+        "network": "'wan' 'wan6'",
+        "input": "'REJECT'",
+        "output": "'ACCEPT'",
+        "forward": "'REJECT'",
+        "masq": "'1'",
+        "mtu_fix": "'1'"
+      }
+    ],
+    "forwarding": [
+      {
+        "src": "'lan'",
+        "dest": "'wan'"
+      }
+    ]
+  },
+  "banip": {
+    "global": {
+      "ban_enabled": "'0'",
+      "ban_debug": "'0'",
+      "ban_mail_enabled": "'0'",
+      "ban_monitor_enabled": "'0'",
+      "ban_logsrc_enabled": "'0'",
+      "ban_logdst_enabled": "'0'",
+      "ban_autodetect": "'1'",
+      "ban_autoblacklist": "'1'",
+      "ban_autowhitelist": "'1'",
+      "ban_nice": "'0'",
+      "ban_maxqueue": "'4'",
+      "ban_global_settype": "'src+dst'",
+      "ban_target_src": "'DROP'",
+      "ban_target_dst": "'REJECT'",
+      "ban_loglimit": "'100'"
+    }
+  },
   "ipv4": [
     {
       "id": 1,
@@ -101,97 +522,97 @@
     }
   ],
   "rules": [
-      {
-        "name": "'Allow-DHCP-Renew'",
-        "src": "'wan'",
-        "proto": "'udp'",
-        "dest_port": "'68'",
-        "target": "'ACCEPT'",
-        "family": "'ipv4'"
-      },
-      {
-        "name": "'Allow-Ping'",
-        "src": "'wan'",
-        "proto": "'icmp'",
-        "icmp_type": "'echo-request'",
-        "family": "'ipv4'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Allow-IGMP'",
-        "src": "'wan'",
-        "proto": "'igmp'",
-        "family": "'ipv4'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Allow-DHCPv6'",
-        "src": "'wan'",
-        "proto": "'udp'",
-        "src_ip": "'fc00::/6'",
-        "dest_ip": "'fc00::/6'",
-        "dest_port": "'546'",
-        "family": "'ipv6'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Allow-MLD'",
-        "src": "'wan'",
-        "proto": "'icmp'",
-        "src_ip": "'fe80::/10'",
-        "icmp_type": "'130/0' '131/0' '132/0' '143/0'",
-        "family": "'ipv6'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Allow-ICMPv6-Input'",
-        "src": "'wan'",
-        "proto": "'icmp'",
-        "icmp_type": "'echo-request' 'echo-reply' 'destination-unreachable' 'packet-too-big' 'time-exceeded' 'bad-header' 'unknown-header-type' 'router-solicitation' 'neighbour-solicitation' 'router-advertisement' 'neighbour-advertisement'",
-        "limit": "'1000/sec'",
-        "family": "'ipv6'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Allow-ICMPv6-Forward'",
-        "src": "'wan'",
-        "dest": "'*'",
-        "proto": "'icmp'",
-        "icmp_type": "'echo-request' 'echo-reply' 'destination-unreachable' 'packet-too-big' 'time-exceeded' 'bad-header' 'unknown-header-type'",
-        "limit": "'1000/sec'",
-        "family": "'ipv6'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Allow-IPSec-ESP'",
-        "src": "'wan'",
-        "dest": "'lan'",
-        "proto": "'esp'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Allow-ISAKMP'",
-        "src": "'wan'",
-        "dest": "'lan'",
-        "dest_port": "'500'",
-        "proto": "'udp'",
-        "target": "'ACCEPT'"
-      },
-      {
-        "name": "'Support-UDP-Traceroute'",
-        "src": "'wan'",
-        "dest_port": "'33434:33689'",
-        "proto": "'udp'",
-        "family": "'ipv4'",
-        "target": "'REJECT'",
-        "enabled": "'0'"
-      },
-      {
-        "name": "'Yasir Access'",
-        "src": "'wan'",
-        "dest_port": "'22'",
-        "target": "'ACCEPT'",
-        "src_ip": "'89.147.205.130'"
-      }
-    ]
+    {
+      "name": "'Allow-DHCP-Renew'",
+      "src": "'wan'",
+      "proto": "'udp'",
+      "dest_port": "'68'",
+      "target": "'ACCEPT'",
+      "family": "'ipv4'"
+    },
+    {
+      "name": "'Allow-Ping'",
+      "src": "'wan'",
+      "proto": "'icmp'",
+      "icmp_type": "'echo-request'",
+      "family": "'ipv4'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Allow-IGMP'",
+      "src": "'wan'",
+      "proto": "'igmp'",
+      "family": "'ipv4'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Allow-DHCPv6'",
+      "src": "'wan'",
+      "proto": "'udp'",
+      "src_ip": "'fc00::/6'",
+      "dest_ip": "'fc00::/6'",
+      "dest_port": "'546'",
+      "family": "'ipv6'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Allow-MLD'",
+      "src": "'wan'",
+      "proto": "'icmp'",
+      "src_ip": "'fe80::/10'",
+      "icmp_type": "'130/0' '131/0' '132/0' '143/0'",
+      "family": "'ipv6'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Allow-ICMPv6-Input'",
+      "src": "'wan'",
+      "proto": "'icmp'",
+      "icmp_type": "'echo-request' 'echo-reply' 'destination-unreachable' 'packet-too-big' 'time-exceeded' 'bad-header' 'unknown-header-type' 'router-solicitation' 'neighbour-solicitation' 'router-advertisement' 'neighbour-advertisement'",
+      "limit": "'1000/sec'",
+      "family": "'ipv6'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Allow-ICMPv6-Forward'",
+      "src": "'wan'",
+      "dest": "'*'",
+      "proto": "'icmp'",
+      "icmp_type": "'echo-request' 'echo-reply' 'destination-unreachable' 'packet-too-big' 'time-exceeded' 'bad-header' 'unknown-header-type'",
+      "limit": "'1000/sec'",
+      "family": "'ipv6'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Allow-IPSec-ESP'",
+      "src": "'wan'",
+      "dest": "'lan'",
+      "proto": "'esp'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Allow-ISAKMP'",
+      "src": "'wan'",
+      "dest": "'lan'",
+      "dest_port": "'500'",
+      "proto": "'udp'",
+      "target": "'ACCEPT'"
+    },
+    {
+      "name": "'Support-UDP-Traceroute'",
+      "src": "'wan'",
+      "dest_port": "'33434:33689'",
+      "proto": "'udp'",
+      "family": "'ipv4'",
+      "target": "'REJECT'",
+      "enabled": "'0'"
+    },
+    {
+      "name": "'Yasir Access'",
+      "src": "'wan'",
+      "dest_port": "'22'",
+      "target": "'ACCEPT'",
+      "src_ip": "'89.147.205.130'"
+    }
+  ]
 }
